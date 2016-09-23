@@ -2,7 +2,9 @@
 
 import re
 import reparse as rep
-import collections
+import collections as col
+import operator as op
+import itertools
 import pprint
 
 class FSM(object):
@@ -50,7 +52,65 @@ class FSM(object):
                 if c == symbol:
                     result.add(t)
         return result
+    
+    def swap_nodes(self, s1, s2):
+        if self.start == s1:
+            self.start = s2
+        elif self.start == s2:
+            self.start = s1
         
+        if s1 in self.final and s2 not in self.final:
+            self.final.remove(s1)
+            self.final.add(s2)
+        elif s2 in self.final and s1 not in self.final:
+            self.final.remove(s2)
+            self.final.add(s1)
+        
+        # helper to get right state
+        def st(s):
+            if s == s1:
+                return s2
+            elif s == s2:
+                return s1
+            else:
+                return s
+
+        self.transtable = {
+            st(k): [ (c, st(t)) for c, t in translist ]
+                for k, translist in self.transtable.items()
+        }
+    
+    def prettify(self):
+        """
+        Rearranges the nodes to flow more intuitively for humans
+        """
+                
+        # start on 0
+        self.swap_nodes(self.start, 0)
+        print(self)
+        translations = { 0: 0 }
+        
+        new_transitions = col.defaultdict(list)
+        for from_state, transitions in sorted(self.transtable.items()):
+            
+            if from_state not in translations:
+                translations[from_state] = len(translations)
+            
+            for c, to_state in transitions:
+                if to_state not in translations:
+                    translations[to_state] = len(translations)
+                
+                new_transitions[translations[from_state]].append((c, translations[to_state]))
+            
+            print('\ntranslations')
+            pprint.pprint(translations)
+            print('\nnew_transitions')
+            pprint.pprint(new_transitions)
+        
+        self.transtable = dict(new_transitions)
+        self.final = { translations[s] for s in self.final }
+        
+    
     def __str__(self):
         output = 'Q: {}\nΣ: {}\nΔ:\n{}\nq0: {}\nF: {}'.format(
             self.get_states(), 
@@ -61,14 +121,6 @@ class FSM(object):
         )
 
         return output 
-        # obj = collections.OrderedDict()
-        # obj['Q'] = self.get_states()
-        # obj['Σ'] = self.get_alphabet()
-        # obj['Δ'] = self.transtable
-        # obj['q_0'] = self.start
-        # obj['F'] = self.final
-        
-        # return pprint.pformat(obj)
     
     def __repr__(self):
         return 'FSM({}, {}, {})'.format(self.transtable, self.start, self.final)
@@ -181,36 +233,83 @@ class NFADFAConverter(object):
         return self.dfa
     
     def minimize_dfa(self):
+        """
+        Uses a worklist algorithm to minimize DFA.
+        """
+            
         # self.counter = 0
         min_dfa = FSM()
         
         alphabet = self.dfa.get_alphabet()
         
-        groups = [self.dfa.final, self.dfa.get_states() - self.dfa.final]
-        print(groups)
+        # [ ( { state, ... },  ) ]
+        groups = [
+            (self.dfa.final, []), 
+            (self.dfa.get_states() - self.dfa.final, [])
+        ]
+        # print(groups)
         
         i = 0
         while i < len(groups):
-            if len(groups[i]) == 1:
-                i += 1
-                continue
+            # print('groups', groups)
             
+            # group_table format: { from_state: [ (c, to_state), ... ], ... }
             group_table = {}
-            for state in groups[i]:
-                print('state: {}'.format(state))
-                group_table[state] = {}
+            for state in groups[i][0]:
+                group_table[state] = []
                 for c in alphabet:
-                    to_states = self.dfa.move(state, c)
-                    if len(to_states) == 0:
+                    try:
+                        to_state = self.dfa.move(state, c).pop()
+                    except KeyError:
                         continue
-                    to_state = to_states.pop()
+                    
                     for g in groups:
-                        if to_state in g:
-                            group_table[state][c] = groups.index(g)
+                        if to_state in g[0]:
+                            group_table[state].append((c, groups.index(g)))
+                
+                # have to keep orders consistent so we can group later
+                group_table[state].sort()  
             
-            print(group_table)
-            print(group_table[1] == group_table[0])
-            i += 1
+            sorted_table = sorted(group_table.items(), key=op.itemgetter(1))
+            # print('sorted_table', sorted_table)
+            new_groups = [
+                ({s for s, _ in g}, x)
+                for x, g in itertools.groupby(sorted_table, key=op.itemgetter(1))
+            ]
+            
+            groups[i:i+1] = new_groups
+            
+            if len(new_groups) > 1:
+                i = 0
+            else:
+                i += 1
+
+            # print('group_table', group_table)
+            # print('new_groups', new_groups)
+            # pprint.pprint(groups)
+
+        # print('final groups', groups)
+        
+        # final minimized DFA
+        min_dfa = FSM()
+        for grouped_state in range(len(groups)):
+            for transition in groups[grouped_state][1]:
+                min_dfa.add_transition(grouped_state, *transition)
+            
+            # if new state contains previous start state, it is new start state
+            if self.dfa.start in groups[grouped_state][0]:
+                min_dfa.start = grouped_state
+            
+            # ditto for final states
+            if not self.dfa.final.isdisjoint(groups[grouped_state][0]):
+                min_dfa.final.add(grouped_state)
+        
+        print('before prettify\n', min_dfa)
+        
+        # make 0 the start node just to look nice
+        min_dfa.prettify()
+        
+        self.dfa = min_dfa
 
     def ep_closure(self, states):
         # worklist algorithm - track by converting set to dict
@@ -241,9 +340,10 @@ def regex_to_dfa(regex):
     return converter.nfa_to_dfa()
 
 def main():
-    print(regex_to_dfa('(aa*bb*)|ab'))
-    
-    print()
+    test_regex = 'a*(a|b)aa'
+    dfa = regex_to_dfa(test_regex)
+    print(test_regex)
+    print(dfa)
 
 if __name__ == '__main__':
     main()
