@@ -340,7 +340,7 @@ def regex_to_dfa(regex):
     return converter.nfa_to_dfa()
 
 def main():
-    test_regex = 'a*(a|b)aa'
+    test_regex = '((a|b)(a|bb))*'
     dfa = regex_to_dfa(test_regex)
     print(test_regex)
     print(dfa)

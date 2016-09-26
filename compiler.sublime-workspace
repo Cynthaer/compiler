@@ -4,12 +4,32 @@
 		"selected_items":
 		[
 			[
-				"from",
-				"from_state"
+				"group",
+				"group_table"
 			],
 			[
-				"trans",
-				"transtable"
+				"get_",
+				"get_alphabet"
+			],
+			[
+				"nfa_",
+				"nfa_to_dfa"
+			],
+			[
+				"dfa",
+				"dfa_state"
+			],
+			[
+				"state",
+				"statedict"
+			],
+			[
+				"get",
+				"get_states"
+			],
+			[
+				"tree",
+				"tree_to_nfa"
 			],
 			[
 				"rege",
@@ -32,16 +52,17 @@
 			"settings":
 			{
 				"buffer_size": 85,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "((+, (|, (+, 'a', 'b'), (*, 'c')), 'd'), 6)",
+			"contents": "infix bind stronger than prefix\n\nA -> - A\nA -> B\nB -> B - A\nB -> id\n\n\n\nprefix bind stronger than infix\n\nA -> A - B\nA -> B\nB -> - B\nB -> id",
 			"settings":
 			{
-				"buffer_size": 43,
+				"buffer_size": 138,
 				"line_ending": "Windows",
-				"name": "((+, (|, (+, 'a', 'b'), (*, 'c')), 'd'), 6)"
+				"name": "infix bind stronger than prefix"
 			}
 		},
 		{
@@ -49,15 +70,16 @@
 			"settings":
 			{
 				"buffer_size": 665,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "fsm.py",
 			"settings":
 			{
-				"buffer_size": 10631,
-				"line_ending": "Unix"
+				"buffer_size": 10636,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -65,7 +87,7 @@
 			"settings":
 			{
 				"buffer_size": 3787,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -74,14 +96,6 @@
 			{
 				"buffer_size": 12966,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/v527695/Sublime Text 3/Data/Packages/Python/Python.sublime-syntax",
-			"settings":
-			{
-				"buffer_size": 37609,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -108,10 +122,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 196.0,
-		"last_filter": "build",
+		"height": 35.0,
+		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"syntax yaml",
+				"Set Syntax: Sublime Text Syntax Def (YAML)"
+			],
 			[
 				"build",
 				"Build: New Build System"
@@ -136,61 +154,94 @@
 		"height": 126.0,
 		"history":
 		[
-			"[ 0 for x in {1, 2, 3} ]",
-			"real_dict",
-			"real_dict = dict(d)",
-			"d",
-			"d[0] ",
-			"d",
-			"d = col.defaultdict(lambda: [])",
-			"d = col.defaultdict(list())",
-			"d = col.defaultdict([])",
-			"import collections as col",
-			"{ k: v for k, v in {1: 5}.items() }",
-			"{ k: v for k, v in {1: 5} }",
-			"d",
-			"d = { frozenset({1, 2}): 'a' }",
-			"d = { {1, 2}: 'a' }",
-			"s1",
-			"s1.add(0)",
-			"s1 & set()",
-			"s1 & {}",
-			"s1 & s2",
-			"s2 = {3, 4, 5}",
-			"s1 = {1, 2, 3}",
 			"l",
-			"del l[1]",
+			"l[1] = (l[1][0], 'a')",
+			"l[1][0] = 4",
+			"l[1][0]",
+			"l[1]",
 			"l",
-			"l += [{1}, {2}]",
+			"l = [(1, 2), (2, 3)]",
 			"l",
-			"l + [{1}, {2}]",
-			"l = [{0}, {1, 2}]",
+			"l[1] = [0]",
+			"l[1]",
+			"l[1:3]",
 			"l",
-			"del l[1:1]",
-			"l + [{1}, {2}]",
-			"l = [{0}, {1, 2}]",
+			"l[1:3] = [7, 8, 9, 10]",
+			"l[1:3]",
+			"l = [1, 2, 3, 4]",
+			"l[1:3]",
 			"l",
-			"del l[1]",
-			"l + [{1}, {2}]",
-			"l = [{0}, {1, 2}]",
-			"s = [{0}, {1, 2}]",
-			"[(1, 2) for x in range(2)]",
-			"list((1, 2) for x in range(2))",
-			"((1, 2) for x in range(2))",
-			"(1, 2 for x in range(2))",
+			"l[1:3] = [1]",
+			"l[1:3]",
+			"l[1:2]",
+			"l = [1, 2, 3]",
 			"set().pop()",
-			"set((1, 2)).pop()",
-			"{12, 2, 1}.pop()",
-			"{12}.pop()",
-			"{1,2}.pop()",
-			"{1}.pop()",
+			"list(iter(d))",
+			"iter(d)",
+			"list(itertools.groupby(d))",
+			"itertools.groupby(d)",
+			"import itertools",
+			"d",
+			"d = {0: 'a', 1: 'b', 2: 'b'}",
+			"d = {0: 'a', 1: 'b', 2: 'b']",
+			"d == {'a': 1, 'b': 2}",
+			"d = {'a': 1, 'b': 2}",
 			"s",
-			"s.add(('a', 1))",
+			"s - t",
+			"t = {2}",
+			"s = {1, 2}",
+			"{l}",
+			"l = [1, 2]",
+			"type({1, 3})",
+			"{1, 3}",
+			"{1} == set([1])",
+			"{1}",
+			"s = set([1, 2, 3])",
+			"len(set())",
+			"set([1, 3, 3, 2]) in l",
+			"set([1, 2, 3]) in l",
+			"l = [set((1, 2, 3))]",
+			"s == set((2, 3, 1))",
+			"s = set([1, 2, 3])",
+			"None in d.values()",
+			"None is d.values()",
+			"d",
+			"d = dict.fromkeys(s)",
+			"s[0]",
+			"len(s)",
+			"[x for x in s]",
 			"s",
-			"s.add(('c', 3))",
-			"s = {('a', 1), ('b', 2)}",
-			"{('a', 1), ('b', 2)}",
-			"{1: 'a'} < {1: 'a'}",
+			"s = set([1, 2, 3])",
+			"set('1')",
+			"set(1)",
+			"set()",
+			"r.__dict__",
+			"r",
+			"r = re.compile('a')",
+			"import re",
+			"snd((1, 2))",
+			"s",
+			"s = set()",
+			"0 in l",
+			"l.append('a')",
+			"0 in l",
+			"l = []",
+			"s",
+			"s.append((None, 3))",
+			"s.push((None, 3))",
+			"s = [(None, 2)]",
+			"(None, 2) in tt[0]",
+			"(None, 1) in tt[0]",
+			"tt[0]",
+			"tt = {0: [(None, 1)]}",
+			"tt[0]",
+			"0 in tt",
+			"tt = {0: (None, 1)}",
+			"tt",
+			"tt[0] = ('a', 1)",
+			"0 in tt",
+			"'0' in tt",
+			"tt = {'0': (None, 'a')}",
 			"import reparse",
 			"iter(1, 2, 3)",
 			"iter(())",
@@ -214,16 +265,20 @@
 	},
 	"file_history":
 	[
-		"/C/Users/v527695/Sublime Text 3/Data/Packages/Python/Python.sublime-syntax",
+		"/C/Users/Nick/Code/compiler/reparse.py",
+		"/C/KISS/CM3D2/UnityInjector/Config/AddYotogiSlider.ini",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/Blackbird.tmTheme",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/Python/syntax_test_python.py",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/Python/Python.sublime-syntax",
+		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/sublime-syntax.sublime-syntax",
 		"/C/Users/Nick/Code/compiler/test_nfa.py",
 		"/C/Users/Nick/Code/compiler/nfa.py",
 		"/C/Users/Nick/Code/compiler/fsm.py",
-		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/Blackbird.tmTheme",
 		"/C/Users/Nick/Code/compiler/nfa.json",
 		"/C/Users/Nick/AppData/Local/Temp/nfa.py",
 		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/Python/Python.sublime-build",
-		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
 		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Nick/AppData/Roaming/Sublime Text 3/Packages/User/XML.sublime-settings"
 	],
@@ -240,19 +295,24 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
+			"state",
+			"pprint",
+			"itertools",
 			"collections",
+			"print",
+			"set(",
+			"line",
 			"dotted_name",
-			"item-access",
-			"expressions",
-			"statements",
-			"operators",
-			"function-",
-			"in",
-			"j",
-			"operator",
+			"FSM",
+			"state",
+			"_b",
+			"_a",
+			"internal",
+			"_internal",
+			"reparse",
 			"_c",
 			"Repetition",
 			"Sequence",
@@ -272,8 +332,12 @@
 		"regex": false,
 		"replace_history":
 		[
-			"grouped_state",
-			"op",
+			"from_state",
+			"NFA",
+			"start_state",
+			"b",
+			"a",
+			"rep",
 			"c",
 			"Star",
 			"Concat",
@@ -291,7 +355,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -319,7 +383,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -356,27 +420,27 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 43,
+						"buffer_size": 138,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								43,
-								43
+								138,
+								138
 							]
 						],
 						"settings":
 						{
-							"auto_name": "((+, (|, (+, 'a', 'b'), (*, 'c')), 'd'), 6)",
+							"auto_name": "infix bind stronger than prefix",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -392,20 +456,19 @@
 						"selection":
 						[
 							[
-								460,
-								460
+								85,
+								85
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"word_wrap": true
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -414,29 +477,28 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10631,
+						"buffer_size": 10636,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3429,
-								3429
+								9524,
+								9524
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"word_wrap": true
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 751.0,
+						"translation.y": 5340.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -458,22 +520,21 @@
 						"selection":
 						[
 							[
-								2418,
-								2418
+								591,
+								591
 							]
 						],
 						"settings":
 						{
 							"auto_name": "",
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"history_list_is_closing": true,
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2028.0,
+						"translation.y": 648.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -489,8 +550,8 @@
 						"selection":
 						[
 							[
-								4947,
-								4947
+								3071,
+								3071
 							]
 						],
 						"settings":
@@ -500,40 +561,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2733.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/C/Users/v527695/Sublime Text 3/Data/Packages/Python/Python.sublime-syntax",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 37609,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								224,
-								224
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/YAML/sublime-syntax.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 504.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -579,7 +610,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 339.0
+		"height": 252.0
 	},
 	"output.find_results":
 	{
